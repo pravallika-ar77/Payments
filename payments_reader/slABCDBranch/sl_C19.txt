@@ -1,0 +1,43 @@
+import pandas as pd
+import streamlit as st
+from sqlalchemy import create_engine
+
+# Streamlit page settings
+st.set_page_config(page_title="CBNK Transaction Viewer", layout="wide")
+st.title("CBNK Bank Transaction Details (0000001 to 0000009)")
+
+# Connect to the SQLite database
+engine = create_engine('sqlite:///payments.db')
+cnx = engine.connect()
+
+# Set Pandas options to show all
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+
+# Loop through agent codes CBNK0000001 to CBNK0000009
+for i in range(1, 10):
+    agent_code = f"CBNK000000{i}"
+    st.markdown(f"---\n## Branch: `{agent_code}`")
+
+    # --- Credit Transactions ---
+    credit_query = f"""
+    SELECT *
+    FROM Transaction_Pacs8_Inwards
+    WHERE CdtrAgt = '{agent_code}'
+    """
+    credit_df = pd.read_sql_query(credit_query, cnx)
+    with st.expander(" View Credit Transactions"):
+        st.dataframe(credit_df, use_container_width=True)
+
+    # --- Debit Transactions ---
+    debit_query = f"""
+    SELECT *
+    FROM Transaction_Pacs8_Outwards
+    WHERE DbtrAgt = '{agent_code}'
+    """
+    debit_df = pd.read_sql_query(debit_query, cnx)
+    with st.expander("View Debit Transactions"):
+        st.dataframe(debit_df, use_container_width=True)
+
+# Close DB connection
+cnx.close()

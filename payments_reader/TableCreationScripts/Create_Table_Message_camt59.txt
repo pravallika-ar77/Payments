@@ -1,0 +1,22 @@
+create table IF NOT EXISTS Message_camt59 (
+
+        BizMsgIdr TEXT PRIMARY KEY,
+		Sndr TEXT NOT NULL,
+		Rcvr TEXT NOT NULL,
+		CreDt DATE NOT NULL
+		)
+		
+
+create table IF NOT EXISTS Transaction_camt59 (
+       
+	   OrgnlItmId TEXT PRIMARY KEY,
+	   BizMsgIdr TEXT NOT NULL,
+	   OrgnlEndToEndId TEXT NOT NULL,	   
+	   Amt REAL NOT NULL,
+	   XpctdValDt DATE NOT NULL,
+	   DbtrAgt TEXT NOT NULL,
+       FOREIGN KEY (BizMsgIdr)
+       REFERENCES Message_camt59 (BizMsgIdr)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE	   
+	   )

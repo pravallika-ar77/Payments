@@ -1,0 +1,39 @@
+OUTWARD
+This is query for outward debits bank wise and their branch wise
+QUERY
+SELECT DbtrAgt, COUNT(*) As transactions, SUM(IntrBkSttlmAmt) AS total_amount
+FROM Transaction_Pacs8_Outwards
+GROUP BY DbtrAgt
+order by DbtrAgt;
+
+
+2>
+if we need to see the transactions of a particular bank then query must be like
+SELECT DbtrAgt, COUNT(*) As transactions, SUM(IntrBkSttlmAmt) AS total_amount
+FROM Transaction_Pacs8_Outwards
+where DbtrAgt like 'ABNK%'
+GROUP BY DbtrAgt
+order by DbtrAgt;
+
+extra examples
+ABNK% can be replaced with BBNK%, CBNK% etc
+
+INWARD
+3>This query is for inwards to those bank  branches
+SELECT CdtrAgt, COUNT(*) As transactions, SUM(IntrBkSttlmAmt) AS total_amount
+FROM Transaction_Pacs8_Inwards
+GROUP BY CdtrAgt
+order by CdtrAgt;
+
+4>for particular bank branch inwards this is query
+SELECT CdtrAgt, COUNT(*) As transactions, SUM(IntrBkSttlmAmt) AS total_amount
+FROM Transaction_Pacs8_Inwards
+where CdtrAgt like 'ABNK%'
+GROUP BY CdtrAgt
+order by CdtrAgt;
+
+
+
+NOTE :
+TRY DOING IT IN PANDAS DATAFRAME
+ASLO CHECK HOW JOINS WORK IN SQL AS WELL IN PANDAS
